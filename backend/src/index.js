@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import session from "express-session";
 import protectedRoutes from "./routes/protected.js";
+import pantryItemsRoutes from "./routes/pantryItems.js";
 
 
 const app = express();
@@ -22,8 +23,12 @@ app.use(session({
 
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.error("MongoDB connection error:", err));
+  .then(() => {
+    console.log("MongoDB connected successfully!");
+  })
+  .catch((err) => {
+    console.error("\nMongoDB connection error:", err.message);
+  });
 
 app.get("/", (req, res) => {
   res.send("API is running!");
@@ -31,6 +36,7 @@ app.get("/", (req, res) => {
 
 // Protected routes (require Firebase auth)
 app.use("/api", protectedRoutes);
+app.use("/api", pantryItemsRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
