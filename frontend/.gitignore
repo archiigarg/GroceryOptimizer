@@ -12,6 +12,11 @@ dist
 dist-ssr
 *.local
 
+
+#api key
+src/lib/firebase.ts
+
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

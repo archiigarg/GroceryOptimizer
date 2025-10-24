@@ -14,7 +14,24 @@ export function Login({ onError }: LoginProps) {
     onError("");
     try {
       const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, provider);
+      
+      // Get the ID token and create user in backend
+      const token = await result.user.getIdToken();
+      const response = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error("Failed to create user in backend");
+      }
+      
+      const data = await response.json();
+      console.log("User created/verified in backend:", data);
     } catch (err: any) {
       onError(err.message);
     } finally {
