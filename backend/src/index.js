@@ -4,6 +4,7 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import session from "express-session";
+import authRoutes from "./routes/auth.js";
 import protectedRoutes from "./routes/protected.js";
 import pantryItemsRoutes from "./routes/pantryItems.js";
 
@@ -33,6 +34,9 @@ mongoose.connect(process.env.MONGO_URI)
 app.get("/", (req, res) => {
   res.send("API is running!");
 });
+
+// Auth routes
+app.use("/api/auth", authRoutes);
 
 // Protected routes (require Firebase auth)
 app.use("/api", protectedRoutes);
